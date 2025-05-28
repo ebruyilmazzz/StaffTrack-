@@ -13,7 +13,8 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $request->validate([
             'fullname' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -30,33 +31,36 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Kayıt başarılı!');
     }
 
-    public function showLoginForm() {
+    public function showLoginForm() 
+    {
         return view('auth.login');
     }
 
-    public function login(Request $request) {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+    
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $role = Auth::user()->role;
-
-            return match ($role) {
-                'Admin' => redirect()->route('admin.dashboard'),
-                'Personnel' => redirect()->route('personnel.dashboard'),
-                default => redirect('/'),
-            };
+    
+            $user = Auth::user();
+    
+            // Rol kontrolü: Örnek olarak 'admin' ve 'personnel'
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('personnel.dashboard');
+            }
         }
-
+    
         return back()->withErrors([
-            'email' => 'Bilgiler yanlış.',
+            'email' => 'The provided credentials do not match our records.',
         ]);
     }
+    
 
-    public function logout(Request $request) {
+    public function logout(Request $request)    
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

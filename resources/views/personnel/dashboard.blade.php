@@ -1,43 +1,116 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personel Paneli</title>
 
-@section('content')
-    <h2>Panel Ana Sayfa</h2>
-    <p>Bu panelde personel bilgilerini görebilir, güncelleyebilir ve diğer işlemleri yapabilirsin.</p>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <div class="personnel-info">
-        <h3>Personel Bilgileri</h3>
-        <ul>
-            <li><strong>Ad Soyad:</strong> {{ Auth::user()->fullname }}</li>
-            <li><strong>Email:</strong> {{ Auth::user()->email }}</li>
-            <li><strong>Rol:</strong> {{ Auth::user()->role }}</li>
-        </ul>
-        <h3>Son Giriş/Çıkış Saatleri</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Tarih</th>
-            <th>Giriş Saati</th>
-            <th>Çıkış Saati</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($working_hours as $hour)
-            <tr>
-                <td>{{ $hour->date }}</td>
-                <td>{{ $hour->clock_in }}</td>
-                <td>{{ $hour->clock_out }}</td>
-            </tr>
-        @endforeach
-    </tbody>
-</table> 
-    </div>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn-action {
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-person-badge-fill me-2"></i>Personel Paneli</a>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3">Hoş geldin, <strong>{{ Auth::user()->fullname }}</strong></span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="btn btn-outline-light btn-sm" type="submit"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</button>
+                </form>
+            </div>
+        </div>
+    </nav>
 
-    <div class="panel-features">
-        <h3>Panel Özellikleri</h3>
-        <ul>
-            <li><a href="#">Personel Listele</a></li>
-            <li><a href="#">Yeni Personel Ekle</a></li>
-            <li><a href="#">Profil Düzenle</a></li>
-        </ul>
-    </div>
-@endsection
+    <!-- Main -->
+    <main class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-primary">👥 Personel Listesi</h2>
+            <a href="{{ route('personnel.create') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-1"></i> Yeni Personel Ekle
+            </a>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover shadow-sm bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Ad Soyad</th>
+                        <th>T.C. No</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th>Doğum Tarihi</th>
+                        <th>Cinsiyet</th>
+                        <th>Departman</th>
+                        <th>Pozisyon</th>
+                        <th>Başlama Tarihi</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($personnel as $person)
+                        <tr>
+                            <td>{{ $person->id }}</td>
+                            <td>{{ $person->name }} {{ $person->surname }}</td>
+                            <td>{{ $person->tc_no }}</td>
+                            <td>{{ $person->email }}</td>
+                            <td>{{ $person->phone }}</td>
+                            <td>{{ \Carbon\Carbon::parse($person->birthday_date)->format('d.m.Y') }}</td>
+                            <td>{{ $person->gender }}</td>
+                            <td>{{ $person->department->name ?? '-' }}</td>
+                            <td>{{ $person->position }}</td>
+                            <td>{{ \Carbon\Carbon::parse($person->starts_date)->format('d.m.Y') }}</td>
+                            <td>
+                                <span class="badge bg-{{ $person->status === 'Aktif' ? 'success' : 'secondary' }}">
+                                    {{ $person->status }}
+                                </span>
+                            </td>
+                            <td class="text-nowrap">
+                                <a href="{{ route('personnel.edit', $person->id) }}" class="btn btn-sm btn-primary btn-action">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <form action="{{ route('personnel.destroy', $person->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Silmek istediğinize emin misiniz?')" type="submit" class="btn btn-sm btn-danger btn-action">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    @if($personnel->isEmpty())
+                        <tr>
+                            <td colspan="12" class="text-center text-muted">Kayıtlı personel bulunamadı.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-muted py-3 mt-5 shadow-sm">
+        &copy; 2025 Şirketiniz. Tüm hakları saklıdır.
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
