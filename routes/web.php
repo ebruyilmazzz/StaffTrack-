@@ -22,11 +22,16 @@ Route::middleware('auth')->group(function () {
     // Anasayfa yönlendirmesi
     Route::get('/', fn () => redirect()->route('dashboard'))->name('home');
 
-    // Dashboard yönlendirmesi
     Route::get('/dashboard', function () {
-        return Auth::user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('personnel.dashboard');
+        $user = Auth::user();
+    
+        if ($user->Admin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->Personnel()) {
+            return redirect()->route('personnel.dashboard');
+        }
+    
+        abort(403, 'Yetkisiz erişim.');
     })->name('dashboard');
 
     // Admin Dashboard

@@ -45,7 +45,6 @@ class AuthController extends Controller
     
             $user = Auth::user();
     
-            // Rol kontrolü: Örnek olarak 'admin' ve 'personnel'
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {

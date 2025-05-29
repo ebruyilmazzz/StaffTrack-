@@ -21,7 +21,6 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#"><i class="bi bi-person-badge-fill me-2"></i>Personel Paneli</a>
@@ -29,13 +28,12 @@
                 <span class="text-white me-3">Hoş geldin, <strong>{{ Auth::user()->fullname }}</strong></span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button class="btn btn-outline-light btn-sm" type="submit"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</button>
+                    <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</button>
                 </form>
             </div>
         </div>
     </nav>
 
-    <!-- Main -->
     <main class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-primary">👥 Personel Listesi</h2>
@@ -44,7 +42,6 @@
             </a>
         </div>
 
-        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover shadow-sm bg-white">
                 <thead class="table-dark">
@@ -77,7 +74,7 @@
                             <td>{{ $person->position }}</td>
                             <td>{{ \Carbon\Carbon::parse($person->starts_date)->format('d.m.Y') }}</td>
                             <td>
-                                <span class="badge bg-{{ $person->status === 'Aktif' ? 'success' : 'secondary' }}">
+                                <span class="badge bg-{{ $person->status === 'Aktif' ? 'success' : 'danger' }}">
                                     {{ $person->status }}
                                 </span>
                             </td>
@@ -105,12 +102,11 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-light text-center text-muted py-3 mt-5 shadow-sm">
         &copy; 2025 Şirketiniz. Tüm hakları saklıdır.
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 
+        

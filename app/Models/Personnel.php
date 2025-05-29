@@ -22,4 +22,12 @@ class Personnel extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function getGenderAttribute($value)
+    {
+        return $value == 'K' ? 'Kadın' : 'Erkek';
+    }
+    public function getStatusAttribute($value)
+    {   
+        return $value == '1' ? 'Aktif' : 'Pasif';
+    }
 }

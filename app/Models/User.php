@@ -2,32 +2,30 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Toplu atama yapılabilir alanlar.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'fullname',
         'email',
         'password',
-        'role',
+        'role', // admin veya personnel gibi
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Serialize edildiğinde gizli tutulacak alanlar.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -35,7 +33,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Dönüştürülecek veri türleri (cast).
      *
      * @return array<string, string>
      */
@@ -45,5 +43,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Rol kontrolü için yardımcı metod (opsiyonel ama önerilir)
+     */
+    public function isAdmin(): bool
+    {
+        return strtolower($this->role) === 'Admin';
+    }
+
+    public function isPersonnel(): bool
+    {
+        return strtolower($this->role) === 'Personnel';
     }
 }

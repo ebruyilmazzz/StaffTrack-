@@ -43,11 +43,11 @@
                             </span>
                         </td>
                         <td>
-                            <a href="{{ route('personnel.edit', $p->id) }}" class="btn btn-warning btn-sm">✏️ Düzenle</a>
+                            <a href="{{ route('personnel.edit', $p->id) }}" class="btn btn-primary btn-sm">✏️</a>
                             <form action="{{ route('personnel.destroy', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Silmek istediğine emin misin?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm">🗑️ Sil</button>
+                                <button class="btn btn-danger btn-sm">🗑️</button>
                             </form>
                         </td>
                     </tr>

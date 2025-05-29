@@ -84,6 +84,11 @@
                     <option value="Pasif">Pasif</option>
                 </select>
             </div>
+            <div class="col-md-6">
+                <label class="form-label">Resim</label>
+                <input type="file" name="photo" class="form-control">
+
+            </div>
         </div>
 
         <div class="mt-4">
