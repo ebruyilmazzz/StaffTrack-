@@ -19,7 +19,7 @@ class User extends Authenticatable
         'fullname',
         'email',
         'password',
-        'role', // admin veya personnel gibi
+        'role',
     ];
 
     /**
@@ -48,13 +48,13 @@ class User extends Authenticatable
     /**
      * Rol kontrolü için yardımcı metod (opsiyonel ama önerilir)
      */
-    public function isAdmin(): bool
+    public function Admin(): bool
     {
-        return strtolower($this->role) === 'Admin';
+        return $this->role === 'Admin';
     }
 
-    public function isPersonnel(): bool
+    public function Personnel(): bool
     {
-        return strtolower($this->role) === 'Personnel';
+        return $this->role === 'Personnel';
     }
 }

@@ -21,18 +21,35 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-person-badge-fill me-2"></i>Personel Paneli</a>
-            <div class="d-flex align-items-center">
-                <span class="text-white me-3">Hoş geldin, <strong>{{ Auth::user()->fullname }}</strong></span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</button>
-                </form>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#"><i class="bi bi-person-badge-fill me-2"></i>Personel Paneli</a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('personnel.index') }}">Personeller</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('worktimes.index') }}">Mesai Kayıtları</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('leaves.index') }}">İzinler</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+
+        <div class="d-flex align-items-center">
+            <span class="text-white me-3">Hoş geldin, <strong>{{ Auth::user()->fullname }}</strong></span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
 
     <main class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">

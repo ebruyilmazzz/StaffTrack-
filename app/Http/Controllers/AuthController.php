@@ -25,7 +25,6 @@ class AuthController extends Controller
             'fullname' => $request->fullname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'Personnel',
         ]);
 
         return redirect()->route('login')->with('success', 'Kayıt başarılı!');
@@ -45,7 +44,7 @@ class AuthController extends Controller
     
             $user = Auth::user();
     
-            if ($user->role === 'admin') {
+            if ($user->Admin()) {
                 return redirect()->route('admin.dashboard');
             } else {
                 return redirect()->route('personnel.dashboard');
